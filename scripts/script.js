@@ -34,7 +34,6 @@ function init() {
 }
 
 function insertCalculations() {
-    console.log(numbers);
     var url = window.location.pathname;
     var filename = url.substring(url.lastIndexOf('/') + 1);
 
@@ -44,7 +43,6 @@ function insertCalculations() {
         }
     }
     qnrs.sort(function () { return 0.5 - Math.random() });
-    console.log(qnrs);
 
     if (filename === "splitsingen.html") {
         for (let i = 0; i < qnrs.length; i++) {
@@ -89,13 +87,9 @@ function evaluate() {
     clearInterval(myVar);
     $("img").remove();
     var answers = document.getElementsByTagName("input");
-    console.log(answers);
-    console.log(qnrs);
     if (filename === "splitsingen.html") {
         for (let i = 0; i < answers.length; i++) {
             var correct = parseInt(answers[i].value) === (qnrs[i][2]);
-
-            console.log(correct);
             if (correct) {
                 answers[i].parentElement.className = "correct";
             } else {
@@ -110,11 +104,8 @@ function evaluate() {
             if (i < answers.length / 2) {
                 correct = parseInt(answers[i].value) === (qnrs[i][0]);
             } else {
-                console.log(qnrs);
-                correct = parseInt(answers[i].value) === (qnrs[i-answers.length/2][2]);
+                correct = parseInt(answers[i].value) === (qnrs[i - answers.length / 2][2]);
             }
-
-            console.log(correct);
             if (correct) {
                 answers[i].parentElement.className = "correct";
             } else {
