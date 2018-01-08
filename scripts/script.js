@@ -1,7 +1,7 @@
 // Numbers to be used in exercise
-var numbers = [0, 1, 2, 3, 4, 5, 6];
-numbers.sort(function () { return 0.5 - Math.random() });
-var correctAnswers = [];
+var numbers = [0, 1, 2, 3, 4, 5, 6, 7];
+// numbers.sort(function () { return 0.5 - Math.random() });
+var qnrs = [];
 var firstAttempt = true;
 var fouten = 0;
 var myVar;
@@ -34,51 +34,96 @@ function init() {
 }
 
 function insertCalculations() {
+    console.log(numbers);
+    var url = window.location.pathname;
+    var filename = url.substring(url.lastIndexOf('/') + 1);
+
     for (let i = 0; i < numbers.length; i++) {
-        var x = numbers[i];
-        for (let j = 0; j < numbers.length; j++) {
-            var y = numbers[j];
-            if (x + y >= 0 && x + y <= 6) {
-                correctAnswers.push(x + y);
-                var div = document.createElement("div");
-                var label = document.createElement("label");
-                var input = document.createElement("input");
-                var t = document.createTextNode(x + " + " + y + " = ");
-                label.appendChild(t);
-                div.appendChild(label);
-                div.appendChild(input);
-                document.getElementById("form").appendChild(div);
-            }
-            if (x - y >= 0 && x - y <= 6) {
-                correctAnswers.push(x - y);
-                var div = document.createElement("div");
-                var label = document.createElement("label");
-                var input = document.createElement("input");
-                var t = document.createTextNode(x + " - " + y + " = ");
-                label.appendChild(t);
-                div.appendChild(label);
-                div.appendChild(input);
-                document.getElementById("form").appendChild(div);
-            }
+        for (let j = 0; j <= numbers[i]; j++) {
+            qnrs.push([numbers[i], j, numbers[i] - j]);
+        }
+    }
+    qnrs.sort(function () { return 0.5 - Math.random() });
+    console.log(qnrs);
+
+    if (filename === "splitsingen.html") {
+        for (let i = 0; i < qnrs.length; i++) {
+            var div = document.createElement("div");
+            var label = document.createElement("label");
+            var input = document.createElement("input");
+            var t = document.createTextNode(qnrs[i][0] + " = " + qnrs[i][1] + " + ");
+            label.appendChild(t);
+            div.appendChild(label);
+            div.appendChild(input);
+            document.getElementById("form").appendChild(div);
+        }
+    } else {
+        for (let i = 0; i < qnrs.length; i++) {
+            var div = document.createElement("div");
+            var label = document.createElement("label");
+            var input = document.createElement("input");
+
+            var t = document.createTextNode(qnrs[i][1] + " + " + qnrs[i][2] + " = ");
+            label.appendChild(t);
+            div.appendChild(label);
+            div.appendChild(input);
+            document.getElementById("form").appendChild(div);
+        }
+        for (let i = 0; i < qnrs.length; i++) {
+            var div = document.createElement("div");
+            var label = document.createElement("label");
+            var input = document.createElement("input");
+
+            var t = document.createTextNode(qnrs[i][0] + " - " + qnrs[i][1] + " = ");
+            label.appendChild(t);
+            div.appendChild(label);
+            div.appendChild(input);
+            document.getElementById("form").appendChild(div);
         }
     }
 }
 
 function evaluate() {
+    var url = window.location.pathname;
+    var filename = url.substring(url.lastIndexOf('/') + 1);
     clearInterval(myVar);
     $("img").remove();
     var answers = document.getElementsByTagName("input");
     console.log(answers);
-    for (let i = 0; i < answers.length; i++) {
-        var correct = parseInt(answers[i].value) === (correctAnswers[i]);
-        console.log(correct);
-        if (correct) {
-            answers[i].parentElement.className = "correct";
-        } else {
-            answers[i].parentElement.className = "";
-            if (firstAttempt) fouten++;
+    console.log(qnrs);
+    if (filename === "splitsingen.html") {
+        for (let i = 0; i < answers.length; i++) {
+            var correct = parseInt(answers[i].value) === (qnrs[i][2]);
+
+            console.log(correct);
+            if (correct) {
+                answers[i].parentElement.className = "correct";
+            } else {
+                answers[i].parentElement.className = "";
+                if (firstAttempt) fouten++;
+            }
         }
     }
+    else {
+        var correct;
+        for (let i = 0; i < answers.length; i++) {
+            if (i < answers.length / 2) {
+                correct = parseInt(answers[i].value) === (qnrs[i][0]);
+            } else {
+                console.log(qnrs);
+                correct = parseInt(answers[i].value) === (qnrs[i-answers.length/2][2]);
+            }
+
+            console.log(correct);
+            if (correct) {
+                answers[i].parentElement.className = "correct";
+            } else {
+                answers[i].parentElement.className = "";
+                if (firstAttempt) fouten++;
+            }
+        }
+    }
+
     var completed = true;
     for (let i = 0; i < answers.length; i++) {
         if (answers[i].parentElement.className !== "correct") {
