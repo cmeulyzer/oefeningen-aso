@@ -1,5 +1,5 @@
 // Numbers to be used in exercise
-var numbers = [0, 1, 2, 3, 4, 5, 6, 7];
+var numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 // numbers.sort(function () { return 0.5 - Math.random() });
 var qnrs = [];
 var firstAttempt = true;
